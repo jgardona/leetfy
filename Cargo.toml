@@ -8,4 +8,6 @@ description = "Leetfy your texts"
 
 [dependencies]
 anyhow = "1.0.75"
+assert_cmd = "2.0.12"
 clap = { version = "4.3.23", features = ["derive"] }
+predicates = "3.0.3"
