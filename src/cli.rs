@@ -3,7 +3,7 @@ use std::fs;
 use anyhow::{Context, Ok, Result};
 use clap::Parser;
 
-use crate::alphabet::{encondestr, Frequency};
+use crate::alphabet::{encodestr, Frequency};
 
 #[derive(Parser)]
 #[command(author, version, about, long_about=None)]
@@ -25,8 +25,8 @@ pub fn execute_cli() -> Result<()> {
     let data = read_full_file(&cli.filename)?;
 
     let result = match cli.mode {
-        Frequency::Low => encondestr(Frequency::Low, data.as_str()),
-        Frequency::Full => encondestr(Frequency::Full, data.as_str()),
+        Frequency::Low => encodestr(Frequency::Low, data.as_str()),
+        Frequency::Full => encodestr(Frequency::Full, data.as_str()),
     };
     print!("{result}");
 

@@ -65,7 +65,7 @@ fn encode(alphabet: &HashMap<char, char>, data: &str) -> String {
     result
 }
 
-pub fn encondestr(frequency: Frequency, data: &str) -> String {
+pub fn encodestr(frequency: Frequency, data: &str) -> String {
     load();
     let result = match frequency {
         Frequency::Low => encode(ALPHABET_LOW_FREQUENCY.get().unwrap(), data),
@@ -76,16 +76,16 @@ pub fn encondestr(frequency: Frequency, data: &str) -> String {
 
 #[cfg(test)]
 mod tests {
-    use super::encondestr;
+    use super::encodestr;
 
     #[test]
     fn test_encode_str_data() {
         let data = "the quick brown fox jumps over the lazy dog";
         let low_frequency = "th3 qu1ck 8r0wn f0x jump5 0v3r th3 l4zy d0g";
         let full_frequency = "+#3 9v1[x 820w~ f0* ]vm?5 0v32 +#3 142j )06";
-        let result = encondestr(super::Frequency::Low, data);
+        let result = encodestr(super::Frequency::Low, data);
         assert_eq!(low_frequency, result);
-        let result = encondestr(super::Frequency::Full, data);
+        let result = encodestr(super::Frequency::Full, data);
         assert_eq!(full_frequency, result);
     }
 }
