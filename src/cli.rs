@@ -1,4 +1,4 @@
-use std::fs;
+use std::{fs, io::Read};
 
 use anyhow::{Context, Ok, Result};
 use clap::Parser;
@@ -8,10 +8,21 @@ use crate::alphabet::{encodestr, Frequency};
 #[derive(Parser)]
 #[command(author, version, about, long_about=None)]
 struct Cli {
+    /// The dictionary type
     #[arg(value_enum)]
     mode: Frequency,
-    #[arg(short, long)]
-    filename: String,
+    /// Read from a file
+    #[arg(name = "filename", short, long)]
+    filename: Option<String>,
+    /// Read from stdin
+    #[arg(short, long, conflicts_with = "filename")]
+    stdin: bool,
+}
+
+fn read_full_stdin<R: Read>(reader: &mut R) -> Result<String> {
+    let mut data = String::new();
+    reader.read_to_string(&mut data)?;
+    Ok(data)
 }
 
 fn read_full_file(path: &str) -> Result<String> {
@@ -22,7 +33,12 @@ fn read_full_file(path: &str) -> Result<String> {
 pub fn execute_cli() -> Result<()> {
     let cli = Cli::parse();
 
-    let data = read_full_file(&cli.filename)?;
+    let data = if let Some(filename) = cli.filename {
+        read_full_file(&filename)?
+    } else {
+        let mut stdin = std::io::stdin().lock();
+        read_full_stdin(&mut stdin)?
+    };
 
     let result = match cli.mode {
         Frequency::Low => encodestr(Frequency::Low, data.as_str()),
@@ -35,12 +51,24 @@ pub fn execute_cli() -> Result<()> {
 
 #[cfg(test)]
 mod tests {
-    use super::read_full_file;
+    use std::io::{Cursor, Write};
+
+    use super::{read_full_file, read_full_stdin};
     use anyhow::{Context, Ok, Result};
     use assert_cmd::Command;
 
     #[test]
     fn it_works() {}
+
+    #[test]
+    fn test_read_from_stdin() {
+        let mut cursor = Cursor::new(Vec::<u8>::new());
+        cursor.write_all(b"one\ntwo\nthree").unwrap();
+        cursor.set_position(0);
+        let result = read_full_stdin(&mut cursor).unwrap();
+        let expected = "one\ntwo\nthree";
+        assert_eq!(expected, result);
+    }
 
     #[test]
     fn test_read_full_file() -> Result<()> {

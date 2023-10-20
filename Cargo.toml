@@ -1,6 +1,6 @@
 [package]
 name = "leetfy"
-version = "0.1.0"
+version = "0.2.0"
 edition = "2021"
 description = "Leetfy your texts"
 
@@ -8,6 +8,15 @@ description = "Leetfy your texts"
 
 [dependencies]
 anyhow = "1.0.75"
-assert_cmd = "2.0.12"
 clap = { version = "4.3.23", features = ["derive"] }
+
+
+[dev-dependencies]
 predicates = "3.0.3"
+assert_cmd = "2.0.12"
+
+[profile.release]
+lto = true
+panic = "abort"
+opt-level = "z"
+strip = true
