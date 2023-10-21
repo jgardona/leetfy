@@ -1,6 +1,6 @@
-use std::{fs, io::Read};
+use std::io::Read;
 
-use anyhow::{Context, Ok, Result};
+use anyhow::{Ok, Result};
 use clap::Parser;
 
 use crate::alphabet::{encodestr, Frequency};
@@ -19,14 +19,9 @@ struct Cli {
     stdin: bool,
 }
 
-fn read_full_stdin<R: Read>(reader: &mut R) -> Result<String> {
+fn read_data_from<R: Read>(reader: &mut R) -> Result<String> {
     let mut data = String::new();
     reader.read_to_string(&mut data)?;
-    Ok(data)
-}
-
-fn read_full_file(path: &str) -> Result<String> {
-    let data = fs::read_to_string(path).context("must be a valid path to file")?;
     Ok(data)
 }
 
@@ -34,10 +29,11 @@ pub fn execute_cli() -> Result<()> {
     let cli = Cli::parse();
 
     let data = if let Some(filename) = cli.filename {
-        read_full_file(&filename)?
+        let mut file = std::fs::File::open(filename)?;
+        read_data_from(&mut file)?
     } else {
         let mut stdin = std::io::stdin().lock();
-        read_full_stdin(&mut stdin)?
+        read_data_from(&mut stdin)?
     };
 
     let result = match cli.mode {
@@ -53,8 +49,8 @@ pub fn execute_cli() -> Result<()> {
 mod tests {
     use std::io::{Cursor, Write};
 
-    use super::{read_full_file, read_full_stdin};
-    use anyhow::{Context, Ok, Result};
+    use super::read_data_from;
+    use anyhow::Context;
     use assert_cmd::Command;
 
     #[test]
@@ -65,17 +61,9 @@ mod tests {
         let mut cursor = Cursor::new(Vec::<u8>::new());
         cursor.write_all(b"one\ntwo\nthree").unwrap();
         cursor.set_position(0);
-        let result = read_full_stdin(&mut cursor).unwrap();
+        let result = read_data_from(&mut cursor).unwrap();
         let expected = "one\ntwo\nthree";
         assert_eq!(expected, result);
-    }
-
-    #[test]
-    fn test_read_full_file() -> Result<()> {
-        let text = "the quick brown fox jumps over the lazy dog";
-        let data = read_full_file("tests/text.txt")?;
-        assert_eq!(text, data);
-        Ok(())
     }
 
     #[test]
