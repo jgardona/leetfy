@@ -5,7 +5,7 @@ Low frequency leet is good for passwords, as you aren't using a full leet dialec
 * **Install**
 
 ```
-cargo install --git https://github.com/jgardona/leetfy
+cargo install leetfy
 ```
 
 * **Test**
@@ -34,6 +34,6 @@ Options:
 
 * **From stdin**
 ```
-$ echo "the quick brown fox jumps over the lazy dog" | ./leetfy -s low
+$ echo "the quick brown fox jumps over the lazy dog" | leetfy -s low
 th3 qu1ck 8r0wn f0x jump5 0v3r th3 l4zy d0g
 ```
