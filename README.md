@@ -26,15 +26,14 @@ Arguments:
   <MODE>  The dictionary frequency [possible values: low, high]
 
 Options:
-  -f, --filename <filename>  Read from a file
-  -s, --stdin                Read from stdin
+  -f, --filename <filename>  Read from file. If not present, read from stdin
   -h, --help                 Print help
   -V, --version              Print version
 ```
 
 * **From stdin**
 ```
-$ echo "the quick brown fox jumps over the lazy dog" | leetfy -s low
+$ echo "the quick brown fox jumps over the lazy dog" | leetfy low
 th3 qu1ck 8r0wn f0x jump5 0v3r th3 l4zy d0g
 ```
 

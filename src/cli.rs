@@ -11,12 +11,9 @@ struct Cli {
     /// The dictionary frequency
     #[arg(value_enum)]
     mode: Frequency,
-    /// Read from a file
-    #[arg(name = "filename", short, long)]
+    /// Read from file. If not present, read from stdin
+    #[arg(short, long)]
     filename: Option<String>,
-    /// Read from stdin
-    #[arg(short, long, conflicts_with = "filename")]
-    stdin: bool,
 }
 
 fn read_data_from<R: Read>(reader: &mut R) -> Result<String> {
@@ -82,14 +79,14 @@ mod tests {
     }
 
     #[test]
-    fn test_cmd_leetfy_full_frequency() {
+    fn test_cmd_leetfy_high_frequency() {
         let mut cmd = Command::cargo_bin("leetfy")
             .context("we need assert that the binary leetfy is available")
             .unwrap();
         let test = cmd
             .arg("--filename")
             .arg("tests/text.txt")
-            .arg("full")
+            .arg("high")
             .assert();
         test.success().stdout(predicates::str::contains(
             "+#3 9v1[x 820w~ f0* ]vm?5 0v32 +#3 142j )06",
