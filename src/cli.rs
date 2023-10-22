@@ -8,7 +8,7 @@ use crate::alphabet::{encodestr, Frequency};
 #[derive(Parser)]
 #[command(author, version, about, long_about=None)]
 struct Cli {
-    /// The dictionary type
+    /// The dictionary frequency
     #[arg(value_enum)]
     mode: Frequency,
     /// Read from a file
@@ -38,7 +38,7 @@ pub fn execute_cli() -> Result<()> {
 
     let result = match cli.mode {
         Frequency::Low => encodestr(Frequency::Low, data.as_str()),
-        Frequency::Full => encodestr(Frequency::Full, data.as_str()),
+        Frequency::High => encodestr(Frequency::High, data.as_str()),
     };
     print!("{result}");
 

@@ -1,5 +1,5 @@
 # leetfy
-Leetfy encodes and transforms your text in leet using low frequency leetcode, or full frequency leetcode.
+Leetfy encodes and transforms your text in leet using low frequency leetcode, or high frequency leetcode.
 Low frequency leetcode is good for passwords, as you aren't using a full leet dialect, and it can enhance your passwords quality.
 
 * **Install**
@@ -23,7 +23,7 @@ Leetfy your texts
 Usage: leetfy [OPTIONS] <MODE>
 
 Arguments:
-  <MODE>  The dictionary type [possible values: low, full]
+  <MODE>  The dictionary frequency [possible values: low, high]
 
 Options:
   -f, --filename <filename>  Read from a file
@@ -40,7 +40,7 @@ th3 qu1ck 8r0wn f0x jump5 0v3r th3 l4zy d0g
 
 * **From file**
 ```
-$ leetfy --filename ~/Documents/Caderno_de_poesias.txt full
+$ leetfy --filename ~/Documents/Caderno_de_poesias.txt high
 C4)32~0 )3 ?035145
 
 C4)32~0 )3 ?035145
