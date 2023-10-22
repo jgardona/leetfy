@@ -3,12 +3,12 @@ use std::{collections::HashMap, sync::OnceLock};
 use clap::ValueEnum;
 
 static ALPHABET_LOW_FREQUENCY: OnceLock<HashMap<char, char>> = OnceLock::new();
-static ALPHABET_FULL_FREQUENCY: OnceLock<HashMap<char, char>> = OnceLock::new();
+static ALPHABET_HIGH_FREQUENCY: OnceLock<HashMap<char, char>> = OnceLock::new();
 
 #[derive(Copy, Clone, PartialEq, Eq, PartialOrd, Ord, ValueEnum)]
 pub enum Frequency {
     Low,
-    Full,
+    High,
 }
 
 fn load() {
@@ -23,7 +23,7 @@ fn load() {
         m
     });
 
-    let _ = ALPHABET_FULL_FREQUENCY.get_or_init(|| {
+    let _ = ALPHABET_HIGH_FREQUENCY.get_or_init(|| {
         let mut m = HashMap::<char, char>::new();
         m.insert('a', '4');
         m.insert('b', '8');
@@ -69,7 +69,7 @@ pub fn encodestr(frequency: Frequency, data: &str) -> String {
     load();
     let result = match frequency {
         Frequency::Low => encode(ALPHABET_LOW_FREQUENCY.get().unwrap(), data),
-        Frequency::Full => encode(ALPHABET_FULL_FREQUENCY.get().unwrap(), data),
+        Frequency::High => encode(ALPHABET_HIGH_FREQUENCY.get().unwrap(), data),
     };
     result
 }
@@ -85,7 +85,7 @@ mod tests {
         let full_frequency = "+#3 9v1[x 820w~ f0* ]vm?5 0v32 +#3 142j )06";
         let result = encodestr(super::Frequency::Low, data);
         assert_eq!(low_frequency, result);
-        let result = encodestr(super::Frequency::Full, data);
+        let result = encodestr(super::Frequency::High, data);
         assert_eq!(full_frequency, result);
     }
 }
